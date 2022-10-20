@@ -18,14 +18,33 @@ const saltRounds = 10;
 
 // POST /auth/signup  - Creates a new user in the database
 router.post("/signup", (req, res, next) => {
-  const { email, password, name } = req.body;
+  const { email, password, confirmPassword, name } = req.body;
 
   // Check if email or password or name are provided as empty strings
-  if (email === "" || password === "" || name === "") {
-    res.status(400).json({ message: "Provide email, password and name" });
+  if (email === "") {
+    res.status(400).json({ message: "Provide email, please." });
     return;
   }
 
+  if (password === "") {
+    res.status(400).json({ message: "Provide password, please" });
+    return;
+  }
+
+  if (name === "") {
+    res.status(400).json({ message: "Provide name, please" });
+    return;
+  }
+
+  //To confirm the password
+  if (password !== confirmPassword) {
+    console.log("Password:", password);
+    console.log("Confirm Password:", confirmPassword);
+    res
+      .status(400)
+      .json({ message: "The password confirmation doesn't match" });
+    return;
+  }
   // This regular expression check that the email is of a valid format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   if (!emailRegex.test(email)) {
