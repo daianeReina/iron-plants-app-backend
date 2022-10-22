@@ -79,17 +79,36 @@ router.post("/signup", (req, res, next) => {
       // We return a pending promise, which allows us to chain another `then`
       return User.create({ email, password: hashedPassword, name });
     })
+
     .then((createdUser) => {
-      // Deconstruct the newly created user object to omit the password
-      // We should never expose passwords publicly
-      const { email, name, _id } = createdUser;
+      // Deconstruct the createdUser object to omit the password
+      const { _id, email, name } = createdUser;
 
-      // Create a new object that doesn't expose the password
-      const user = { email, name, _id };
+      // Create an object that will be set as the token payload
+      const payload = { _id, email, name };
 
-      // Send a json response containing the user object
-      res.status(201).json({ user: user });
+      // Create a JSON Web Token and sign it
+      const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
+        algorithm: "HS256",
+        expiresIn: "6h",
+      });
+      console.log("AuthToken---------->", authToken);
+
+      // Send the new user and the token as the response
+      res.status(200).json({ createdUser, authToken: authToken });
     })
+
+    // .then((createdUser) => {
+    //   // Deconstruct the newly created user object to omit the password
+    //   // We should never expose passwords publicly
+    //   const { email, name, _id } = createdUser;
+
+    //   // Create a new object that doesn't expose the password
+    //   const user = { email, name, _id };
+
+    //   // Send a json response containing the user object
+    //   res.status(201).json({ user: user });
+    // })
     .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
 });
 

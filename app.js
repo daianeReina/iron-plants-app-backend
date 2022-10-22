@@ -16,7 +16,7 @@ require("./config")(app);
 
 // 👇 Start handling routes here
 const indexRoutes = require("./routes/index.routes");
-app.use("/", indexRoutes); // the original version was "/api" why
+app.use("/", indexRoutes); // the original version was "/api" why??????
 
 const authRoutes = require("./routes/auth.routes");
 app.use("/auth", authRoutes);
