@@ -32,7 +32,7 @@ router.post("/signup", (req, res, next) => {
   }
 
   if (name === "") {
-    res.status(400).json({ message: "Provide name, please" });
+    res.status(400).json({ message: "Provide your name, please" });
     return;
   }
 
