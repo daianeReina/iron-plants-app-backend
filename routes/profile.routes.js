@@ -99,10 +99,6 @@ profileRouter.post("/edit-password", isAuthenticated, (req, res, next) => {
   User.findOne({ _id }).then((foundUser) => {
     console.log("The user:", foundUser);
 
-    // if (!foundUser) {
-    //   return res.status(400).json({ message: "🤌🤌🤌🤌🤌🤌" });
-    // }
-
     // Compare the provided password with the one saved in the database
     const passwordCorrect = bcrypt.compareSync(password, foundUser.password);
     console.log("Password is Corret?", passwordCorrect);
@@ -133,4 +129,55 @@ profileRouter.post("/edit-password", isAuthenticated, (req, res, next) => {
   });
 });
 
+// 🗑️ DELETE ACCOUNT ********************
+
+profileRouter.post("/delete-account", isAuthenticated, (req, res, next) => {
+  const { _id, password } = req.body;
+
+  if (password === "") {
+    res
+      .status(400)
+      .json({ message: "Provide your password, to confirm your deletion." });
+    return;
+  }
+
+  User.findById(_id).then((foundUser) => {
+    console.log("🗑️ User who want to delete their account: ", foundUser);
+
+    // Compare the provided password with the one saved in the database
+    const passwordCorrect = bcrypt.compareSync(password, foundUser.password);
+    console.log("Password is Corret?", passwordCorrect);
+
+    if (passwordCorrect) {
+      User.findByIdAndDelete(_id).then(() => {
+        const sim = true;
+
+        res.json({ sucesso: sim });
+      });
+    } else {
+      res.status(401).json({ message: "Password wrong!" });
+    }
+  });
+});
+
 module.exports = profileRouter;
+
+// if (passwordCorrect) {
+//     // Deconstruct the user object to omit the password
+//     const { _id, email, name } = foundUser;
+
+//     User.findByIdAndDelete(_id).then((deleteUser) => {
+//       // Create an object that will be set as the token payload
+//       const payload = { _id, email, name };
+
+//       // Create a JSON Web Token and sign it
+//       const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
+//         algorithm: "HS256",
+//         expiresIn: "6h",
+//       });
+
+//       res.json({ user: deleteUser, authToken: authToken });
+//     });
+//   } else {
+//     res.status(401).json({ message: "Password wrong!" });
+//   }
