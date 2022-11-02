@@ -11,6 +11,11 @@ router.get("/", (req, res, next) => {
 
 router.use("/profile", profileRoutes);
 
-router.get("/plants", plantRouter);
+// router.get("/plants", plantRouter);
+
+router.get("/plants", (req, res, next) => {
+  res.json({ hi: "This router exists" });
+  res.json(plantRouter);
+});
 
 module.exports = router;
