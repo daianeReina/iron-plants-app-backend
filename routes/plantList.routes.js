@@ -16,14 +16,8 @@ listPlantRouter.get("/", isLoggedIn, (req, res, next) => {
 
 listPlantRouter.post("/add-plant", isLoggedIn, (req, res, next) => {
   const { latin, common, category } = req.body;
-  //   console.log("Latin Name:", latin);
-
-  //   console.log(req.user);
 
   Plant.findOne({ owner: req.user._id, latin }).then((possiblePlant) => {
-    // console.log("POSSIBLE PLANT", possiblePlant.latin);
-    // console.log("LATIN of plant", latin);
-
     if (possiblePlant) {
       return res
         .status(400)
@@ -32,14 +26,6 @@ listPlantRouter.post("/add-plant", isLoggedIn, (req, res, next) => {
 
     Plant.create({ latin, common, category, owner: req.user._id }).then(
       (createdPlant) => {
-        // Create an object that will be set as the token payload
-        // const payload = { latin, common, category };
-
-        // const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
-        //   algorithm: "HS256",
-        //   expiresIn: "6h",
-        // });
-
         res.json(createdPlant);
       }
     );

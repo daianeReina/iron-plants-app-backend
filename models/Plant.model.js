@@ -12,9 +12,39 @@ const plantSchema = new Schema(
     category: {
       type: String,
     },
-    // image: {
+
+    // origin: {
     //   type: String,
     // },
+
+    // climate: {
+    //   type: String,
+    // },
+
+    // tempmax: {
+    //   type: [Number],
+    // },
+
+    // tempmin: {
+    //   type: [Number],
+    // },
+
+    // ideallight: {
+    //   type: String,
+    // },
+
+    // toleratedlight: {
+    //   type: String,
+    // },
+
+    // watering: {
+    //   type: String,
+    // },
+
+    // watering: {
+    //   type: String,
+    // },
+
     owner: {
       type: Schema.Types.ObjectId,
       ref: userCollectionName,
