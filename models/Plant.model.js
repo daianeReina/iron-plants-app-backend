@@ -1,50 +1,31 @@
 const { Schema, model } = require("mongoose");
+const { userCollectionName } = require("./User.model");
 
-const plantSchema = new Schema({
-  commonName: {
-    type: [String],
+const plantSchema = new Schema(
+  {
+    common: {
+      type: [String],
+    },
+    latin: {
+      type: String,
+    },
+    category: {
+      type: String,
+    },
+    // image: {
+    //   type: String,
+    // },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: userCollectionName,
+    },
   },
-  latinName: {
-    type: String,
-  },
-  family: {
-    type: String,
-  },
-  category: {
-    type: String,
-  },
-  origin: {
-    type: String,
-  },
-  tempMin: {
-    type: Number,
-  },
-  tempMax: {
-    type: Number,
-  },
-  ideallight: {
-    type: String,
-  },
-  toleratedlight: {
-    type: String,
-  },
-  watering: {
-    type: String,
-  },
-  insects: {
-    type: [String],
-  },
-  diseases: {
-    type: [String],
-  },
-  use: {
-    type: [String],
-  },
-  image: {
-    type: String,
-  },
-});
+  {
+    // this second object adds extra properties: `createdAt` and `updatedAt`
+    timestamps: true,
+  }
+);
+const plantCollectionName = "Plant";
+const Plant = model(plantCollectionName, plantSchema);
 
-const Plant = model("Plant", plantSchema);
-
-module.exports = Plant;
+module.exports = { plantCollectionName, Plant };
