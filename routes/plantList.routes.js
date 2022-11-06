@@ -32,4 +32,24 @@ listPlantRouter.post("/add-plant", isLoggedIn, (req, res, next) => {
   });
 });
 
+// 🗑️ DELETE PLANT ********************
+listPlantRouter.post("/delete-plant", isLoggedIn, (req, res, next) => {
+  const { latin } = req.body;
+  console.log("REQBODDYYY", req.body);
+
+  Plant.findOne({ owner: req.user._id, latin }).then((foundPlant) => {
+    console.log("Plant that user wants to delete:", foundPlant);
+
+    const { _id } = foundPlant;
+
+    console.log("IDDD da Planta", _id);
+
+    Plant.findByIdAndDelete(_id).then(() => {
+      const sim = true;
+
+      res.json({ sucesso: sim });
+    });
+  });
+});
+
 module.exports = listPlantRouter;
