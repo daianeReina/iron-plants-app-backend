@@ -40,8 +40,11 @@ listPlantRouter.post("/delete-plant", isLoggedIn, (req, res, next) => {
   Plant.findOne({ owner: req.user._id, latin }).then((foundPlant) => {
     console.log("Plant that user wants to delete:", foundPlant);
 
-    const { _id } = foundPlant;
+    if (!foundPlant) {
+      return res.json({ successo: true });
+    }
 
+    const { _id } = foundPlant;
     console.log("IDDD da Planta", _id);
 
     Plant.findByIdAndDelete(_id).then(() => {
